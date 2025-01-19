@@ -8,55 +8,59 @@ Created on Tue Jan 14 14:27:03 2025
 import requests
 import random
 
-# URL de l'API Open Trivia
+# Open Trivia API URL
 API_URL = "https://opentdb.com/api.php"
 
-# Paramètres pour récupérer 10 questions de difficulté facile
+# Parameters to fetch 10 questions with easy difficulty and multiple types
 params = {
-    "amount": 10,           # Nombre de questions
-    "difficulty": "easy",  # Difficulté des questions
-    "type": "multiple"     # Type : choix multiple
+    "amount": 10,           # Number of questions
+    "difficulty": "easy",   # Difficulty of the questions
+    "type": "multiple"      # Type: multiple choice (we will allow true/false as well)
 }
 
-# Récupérer les questions depuis l'API
+# Fetch the questions from the API
 response = requests.get(API_URL, params=params)
 
-# Vérifier si la requête a réussi
+# Check if the request was successful
 if response.status_code == 200:
     data = response.json()
-    questions = data["results"]  # Les questions sont dans le champ "results"
+    questions = data["results"]  # Questions are in the "results" field
 else:
-    print(f"Erreur : impossible de récupérer les questions ({response.status_code})")
+    print(f"Error: Unable to fetch questions ({response.status_code})")
     exit()
 
-# Variable pour suivre les réponses correctes
-all_correct = True  # On part du principe que le joueur répondra bien à tout
+# Variable to track correct answers
+all_correct = True  # Assume the player will answer everything correctly
 
-# Parcourir et afficher les questions une par une
+# Loop through and display each question one by one
 for idx, question in enumerate(questions, start=1):
     print(f"\nQuestion {idx}: {question['question']}")
 
-    # Mélanger les réponses possibles (incorrectes + correcte)
-    options = question["incorrect_answers"] + [question["correct_answer"]]
-    random.shuffle(options)
+    # Check if it's a True/False question
+    if question['type'] == 'boolean':
+        options = ['True', 'False']  # True/False options
+    else:
+        # Shuffle the possible answers (incorrect + correct)
+        options = question["incorrect_answers"] + [question["correct_answer"]]
+        random.shuffle(options)
 
-    # Afficher les réponses
+    # Display the answers
     for i, option in enumerate(options, start=1):
         print(f"  {i}. {option}")
 
-    # Demander la réponse de l'utilisateur
-    user_answer = input("Votre réponse (numéro) : ")
+    # Ask for the user's answer
+    user_answer = input("Your answer (number): ")
 
-    # Vérifier si la réponse est correcte
+    # Check if the answer is correct
     if options[int(user_answer) - 1] == question["correct_answer"]:
-        print("✅ Correct ! 🎉")
+        print("✅ Correct! 🎉")
     else:
-        print(f"❌ Faux. La bonne réponse était : {question['correct_answer']}")
-        all_correct = False  # Le joueur a échoué sur une question
+        print(f"❌ Incorrect. The correct answer was: {question['correct_answer']}")
+        all_correct = False  # The player failed on a question
 
-# Vérifier si le joueur a gagné
+# Check if the player won
 if all_correct:
-    print("\n🏆 Félicitations ! Vous avez répondu correctement à toutes les questions. Vous avez gagné ! 🎉")
+    print("\n🏆 Congratulations! You answered all the questions correctly. You won!")
 else:
-    print("\n❌ Dommage ! Vous n'avez pas répondu correctement à toutes les questions. Vous avez perdu !")
+    print("\n❌ Sorry! You didn't answer all the questions correctly. You lost!")
 
