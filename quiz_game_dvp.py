@@ -60,3 +60,6 @@ if all_correct:
 else:
     print("\n❌ Dommage ! Vous n'avez pas répondu correctement à toutes les questions. Vous avez perdu !")
 
+#Score
+#True/False
+#Difficulty level
