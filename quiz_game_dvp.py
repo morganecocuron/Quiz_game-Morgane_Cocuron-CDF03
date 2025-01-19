@@ -45,7 +45,13 @@ for idx, question in enumerate(questions, start=1):
         print(f"  {i}. {option}")
 
     # Demander la réponse de l'utilisateur
-    user_answer = input("Votre réponse (numéro) : ")
+
+    while True:
+        user_answer = input("Votre réponse (numéro 1-4) : ")
+        if user_answer in ['1', '2', '3', '4']:
+            break
+        else:
+            print("Réponse invalide. Veuillez entrer un numéro entre 1 et 4.")
 
     # Vérifier si la réponse est correcte
     if options[int(user_answer) - 1] == question["correct_answer"]:
