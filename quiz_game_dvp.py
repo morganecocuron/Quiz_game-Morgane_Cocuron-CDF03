@@ -64,6 +64,8 @@ if all_correct:
 else:
     print("\n❌ Sorry! You didn't answer all the questions correctly. You lost!")
 
+
+
 #Score
 #True/False
 #Difficulty level
