@@ -32,10 +32,14 @@ else:
 # Variable pour suivre les réponses correctes
 all_correct = True  # On part du principe que le joueur répondra bien à tout
 
+# Points obtenus
+points = 0
+
 # Parcourir et afficher les questions une par une
 for idx, question in enumerate(questions, start=1):
-    print(f"\nQuestion {idx}: {question['question']}")
 
+    print(f"\nPoints : {points}")
+    print(f"\nQuestion {idx}: {question['question']}")
     # Mélanger les réponses possibles (incorrectes + correcte)
     options = question["incorrect_answers"] + [question["correct_answer"]]
     random.shuffle(options)
@@ -55,14 +59,16 @@ for idx, question in enumerate(questions, start=1):
 
     # Vérifier si la réponse est correcte
     if options[int(user_answer) - 1] == question["correct_answer"]:
+        points += 1
         print("✅ Correct ! 🎉")
     else:
         print(f"❌ Faux. La bonne réponse était : {question['correct_answer']}")
         all_correct = False  # Le joueur a échoué sur une question
 
 # Vérifier si le joueur a gagné
+
 if all_correct:
     print("\n🏆 Félicitations ! Vous avez répondu correctement à toutes les questions. Vous avez gagné ! 🎉")
 else:
     print("\n❌ Dommage ! Vous n'avez pas répondu correctement à toutes les questions. Vous avez perdu !")
-
+print(f"\nVous avez obtenu {points} points.")
